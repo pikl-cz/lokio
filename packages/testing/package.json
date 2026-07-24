@@ -1,0 +1,26 @@
+{
+  "name": "@lokio/testing",
+  "version": "0.1.0",
+  "description": "Testing helpers for Lokio applications: an in-memory adapter and mock workspace factory.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --out-dir dist --clean",
+    "dev": "tsup src/index.ts --format esm --dts --out-dir dist --watch",
+    "clean": "rimraf dist",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@lokio/core": "*",
+    "@lokio/types": "*"
+  }
+}
