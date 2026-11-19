@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable", "DOM.AsyncIterable"],
+    "types": ["wicg-file-system-access"]
+  },
+  "include": ["src"],
+  "exclude": ["src/node.ts", "src/node.test.ts"]
+}
