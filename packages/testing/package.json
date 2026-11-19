@@ -1,26 +1,73 @@
 {
   "name": "@lokio/testing",
   "version": "0.1.0",
-  "description": "Testing helpers for Lokio applications: an in-memory adapter and mock workspace factory.",
+  "description": "Testing helpers for Lokio: in-memory adapter, adapter conformance suite and a fake File System Access API.",
+  "keywords": [
+    "lokio",
+    "local-first",
+    "offline-first",
+    "filesystem",
+    "file-system-access",
+    "workspace",
+    "typescript"
+  ],
+  "homepage": "https://github.com/pikl-cz/lokio/tree/main/packages/testing#readme",
+  "bugs": {
+    "url": "https://github.com/pikl-cz/lokio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pikl-cz/lokio.git",
+    "directory": "packages/testing"
+  },
   "license": "MIT",
+  "author": "Jan Pikl",
   "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./conformance": {
+      "types": "./dist/conformance.d.ts",
+      "import": "./dist/conformance.js"
+    },
+    "./fs-access": {
+      "types": "./dist/fs-access.d.ts",
+      "import": "./dist/fs-access.js"
+    },
+    "./package.json": "./package.json"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --out-dir dist --clean",
-    "dev": "tsup src/index.ts --format esm --dts --out-dir dist --watch",
+    "build": "tsup src/index.ts src/conformance.ts src/fs-access.ts --format esm --dts --out-dir dist --clean",
+    "dev": "tsup src/index.ts src/conformance.ts src/fs-access.ts --format esm --dts --out-dir dist --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
     "clean": "rimraf dist",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "prepack": "node ../../scripts/copy-license.mjs"
   },
   "dependencies": {
-    "@lokio/core": "*",
-    "@lokio/types": "*"
+    "@lokio/core": "workspace:^",
+    "@lokio/types": "workspace:^"
+  },
+  "peerDependencies": {
+    "vitest": ">=2"
+  },
+  "peerDependenciesMeta": {
+    "vitest": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
