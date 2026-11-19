@@ -1,0 +1,15 @@
+{
+  "name": "@lokio-examples/node-journal",
+  "private": true,
+  "type": "module",
+  "description": "A tiny CLI journal: plain Markdown files, version history and full-text search.",
+  "scripts": {
+    "start": "node journal.js"
+  },
+  "dependencies": {
+    "@lokio/core": "workspace:*",
+    "@lokio/node": "workspace:*",
+    "@lokio/plugin-history": "workspace:*",
+    "@lokio/plugin-search": "workspace:*"
+  }
+}
