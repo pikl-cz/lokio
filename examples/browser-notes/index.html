@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lokio notes</title>
+    <style>
+      :root { font-family: system-ui, sans-serif; color-scheme: light dark; }
+      body { margin: 0; display: grid; grid-template-columns: 260px 1fr; height: 100vh; }
+      aside { border-right: 1px solid #8884; padding: 12px; display: flex; flex-direction: column; gap: 8px; overflow: auto; }
+      main { display: flex; flex-direction: column; padding: 12px; gap: 8px; }
+      textarea { flex: 1; font: 15px/1.5 ui-monospace, monospace; padding: 12px; }
+      ul { list-style: none; padding: 0; margin: 0; }
+      li button { width: 100%; text-align: left; background: none; border: 0; padding: 6px; cursor: pointer; border-radius: 6px; color: inherit; }
+      li button[aria-current="true"] { background: #8883; }
+      #status { font-size: 12px; opacity: 0.7; }
+      @media (max-width: 640px) { body { grid-template-columns: 1fr; grid-template-rows: auto 1fr; } }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <button id="open" type="button">Open folder…</button>
+      <button id="new" type="button" disabled>New note</button>
+      <input id="search" type="search" placeholder="Search (diacritics optional)" disabled />
+      <ul id="notes"></ul>
+      <div id="status">No folder open.</div>
+    </aside>
+    <main>
+      <textarea id="editor" placeholder="Open a folder and pick a note" disabled></textarea>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

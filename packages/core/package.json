@@ -1,25 +1,56 @@
 {
   "name": "@lokio/core",
   "version": "0.1.0",
-  "description": "Lokio core SDK: workspace, file and directory abstractions, adapter interface, events and plugins.",
+  "description": "Lokio core SDK: workspace, file and directory abstractions, adapter interface, events, locks and plugins.",
+  "keywords": [
+    "lokio",
+    "local-first",
+    "offline-first",
+    "filesystem",
+    "file-system-access",
+    "workspace",
+    "typescript"
+  ],
+  "homepage": "https://github.com/pikl-cz/lokio/tree/main/packages/core#readme",
+  "bugs": {
+    "url": "https://github.com/pikl-cz/lokio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pikl-cz/lokio.git",
+    "directory": "packages/core"
+  },
   "license": "MIT",
+  "author": "Jan Pikl",
   "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --out-dir dist --clean",
     "dev": "tsup src/index.ts --format esm --dts --out-dir dist --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
     "clean": "rimraf dist",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "prepack": "node ../../scripts/copy-license.mjs"
   },
   "dependencies": {
-    "@lokio/types": "*"
+    "@lokio/types": "workspace:^"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }

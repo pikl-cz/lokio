@@ -2,16 +2,24 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022", "DOM"],
+    "types": [],
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
     "declaration": true,
-    "declarationMap": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "resolveJsonModule": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@lokio/testing/conformance": ["./packages/testing/src/conformance.ts"],
+      "@lokio/testing/fs-access": ["./packages/testing/src/fs-access.ts"],
+      "@lokio/*": ["./packages/*/src/index.ts"]
+    }
   }
 }

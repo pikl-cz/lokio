@@ -1,0 +1,62 @@
+{
+  "name": "@lokio/auto",
+  "version": "0.1.0",
+  "description": "Open a Lokio workspace with the right adapter for the current runtime (Node or browser).",
+  "keywords": [
+    "lokio",
+    "local-first",
+    "offline-first",
+    "filesystem",
+    "file-system-access",
+    "workspace",
+    "typescript"
+  ],
+  "homepage": "https://github.com/pikl-cz/lokio/tree/main/packages/auto#readme",
+  "bugs": {
+    "url": "https://github.com/pikl-cz/lokio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pikl-cz/lokio.git",
+    "directory": "packages/auto"
+  },
+  "license": "MIT",
+  "author": "Jan Pikl",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/node.js",
+  "browser": "./dist/browser.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/browser.js",
+      "node": "./dist/node.js",
+      "default": "./dist/browser.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/node.ts src/browser.ts --format esm --out-dir dist --clean && tsup src/index.ts --format esm --dts-only --out-dir dist",
+    "dev": "tsup src/node.ts src/browser.ts --format esm --out-dir dist --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",
+    "clean": "rimraf dist",
+    "prepack": "node ../../scripts/copy-license.mjs"
+  },
+  "dependencies": {
+    "@lokio/browser": "workspace:^",
+    "@lokio/core": "workspace:^",
+    "@lokio/node": "workspace:^",
+    "@lokio/types": "workspace:^"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

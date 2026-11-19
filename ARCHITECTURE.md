@@ -1,4 +1,7 @@
-# Lokio – Agent Assignment
+# Lokio – Architecture
+
+> **Status (v0.1):** Phase 1 is implemented, and Phase 2 partly (history and encryption plugins, CLI), plus a
+> search plugin and `@lokio/auto`. The original brief follows; the package READMEs document the actual API.
 
 ## Vision
 
@@ -14,15 +17,15 @@ The primary philosophy is:
 
 # Core Principles
 
-* TypeScript-first
-* Framework agnostic
-* Local-first
-* Offline-first
-* User owns the data
-* No proprietary file format
-* Extensible through adapters and plugins
-* Optional native acceleration (Rust/WASM)
-* Optional PWA support
+- TypeScript-first
+- Framework agnostic
+- Local-first
+- Offline-first
+- User owns the data
+- No proprietary file format
+- Extensible through adapters and plugins
+- Optional native acceleration (Rust/WASM)
+- Optional PWA support
 
 ---
 
@@ -31,19 +34,19 @@ The primary philosophy is:
 Lokio should make this simple:
 
 ```ts
-const workspace = await Lokio.openWorkspace();
+const workspace = await openWorkspace(); // from @lokio/auto
 
-const file = await workspace.open("dreams/today.dream");
+const file = workspace.file("dreams/today.dream");
 
 await file.write(content);
 ```
 
 without the application worrying about:
 
-* permissions
-* browser APIs
-* filesystem abstraction
-* future runtime compatibility
+- permissions
+- browser APIs
+- filesystem abstraction
+- future runtime compatibility
 
 ---
 
@@ -51,11 +54,11 @@ without the application worrying about:
 
 Lokio is:
 
-* SDK
-* Runtime abstraction
-* Filesystem abstraction
-* Workspace manager
-* Extension platform
+- SDK
+- Runtime abstraction
+- Filesystem abstraction
+- Workspace manager
+- Extension platform
 
 ---
 
@@ -63,19 +66,19 @@ Lokio is:
 
 Lokio is NOT:
 
-* a web framework
-* a React framework
-* a database
-* a note-taking application
-* a cloud service
-* a file format
+- a web framework
+- a React framework
+- a database
+- a note-taking application
+- a cloud service
+- a file format
 
 Applications decide:
 
-* data format
-* UI
-* business logic
-* storage structure
+- data format
+- UI
+- business logic
+- storage structure
 
 ---
 
@@ -162,13 +165,13 @@ tests/
 
 Contains:
 
-* Workspace abstraction
-* File abstraction
-* Directory abstraction
-* Event system
-* Plugin API
-* Adapter interfaces
-* Error handling
+- Workspace abstraction
+- File abstraction
+- Directory abstraction
+- Event system
+- Plugin API
+- Adapter interfaces
+- Error handling
 
 No runtime-specific code.
 
@@ -178,12 +181,12 @@ No runtime-specific code.
 
 Implements:
 
-* File System Access API
+- File System Access API
 
 Provides:
 
 ```ts
-BrowserAdapter
+BrowserAdapter;
 ```
 
 ---
@@ -192,14 +195,14 @@ BrowserAdapter
 
 Implements:
 
-* fs/promises
+- fs/promises
 
 Allows using Lokio inside:
 
-* Node
-* CLI
-* Electron
-* Tauri backend
+- Node
+- CLI
+- Electron
+- Tauri backend
 
 ---
 
@@ -227,9 +230,9 @@ Testing helpers.
 
 Examples:
 
-* fake filesystem
-* mock adapter
-* permission simulator
+- fake filesystem
+- mock adapter
+- permission simulator
 
 ---
 
@@ -261,9 +264,9 @@ Plugin interface example:
 
 ```ts
 interface LokioPlugin {
-    name: string;
+  name: string;
 
-    setup(app: Lokio): void;
+  setup(app: Lokio): void;
 }
 ```
 
@@ -298,12 +301,12 @@ Optional acceleration layer.
 
 Possible use cases:
 
-* indexing
-* search
-* hashing
-* compression
-* encryption
-* binary parsing
+- indexing
+- search
+- hashing
+- compression
+- encryption
+- binary parsing
 
 Must remain optional.
 
@@ -317,9 +320,9 @@ Optional package.
 
 Provides:
 
-* Service Worker
-* Offline caching
-* Installation support
+- Service Worker
+- Offline caching
+- Installation support
 
 Should not be part of the Core SDK.
 
@@ -329,11 +332,11 @@ Should not be part of the Core SDK.
 
 Potential adapters:
 
-* Tauri
-* Electron
-* Node
-* Bun
-* Deno
+- Tauri
+- Electron
+- Node
+- Bun
+- Deno
 
 ---
 
@@ -397,12 +400,12 @@ Developer decides storage layout.
 
 Every package must include:
 
-* installation
-* quick start
-* API reference
-* examples
-* best practices
-* migration guide (future)
+- installation
+- quick start
+- API reference
+- examples
+- best practices
+- migration guide (future)
 
 ---
 
@@ -436,20 +439,20 @@ Testing is mandatory.
 
 Requirements:
 
-* Vitest
-* High unit test coverage
-* Mock adapters
-* Filesystem simulation
-* CI ready
+- Vitest
+- High unit test coverage
+- Mock adapters
+- Filesystem simulation
+- CI ready
 
 Suggested coverage:
 
-* Workspace
-* Files
-* Directories
-* Plugins
-* Adapter interface
-* Error handling
+- Workspace
+- Files
+- Directories
+- Plugins
+- Adapter interface
+- Error handling
 
 ---
 
@@ -457,7 +460,7 @@ Suggested coverage:
 
 Requirements:
 
-* Strict mode
+- Strict mode
 
 ```
 "strict": true
@@ -479,9 +482,9 @@ ESM-first.
 
 Recommended tooling:
 
-* tsup (or equivalent)
-* TypeScript
-* npm workspaces
+- tsup (or equivalent)
+- TypeScript
+- npm workspaces
 
 Output:
 
@@ -497,12 +500,12 @@ types/
 
 # Coding Standards
 
-* SOLID
-* Composition over inheritance
-* Small modules
-* Tree-shakeable
-* No framework dependencies
-* Minimal external dependencies
+- SOLID
+- Composition over inheritance
+- Small modules
+- Tree-shakeable
+- No framework dependencies
+- Minimal external dependencies
 
 ---
 
@@ -570,11 +573,11 @@ IDE tooling
 
 A developer should be able to:
 
-* install Lokio using npm or yarn
-* choose any frontend framework (React, Next.js, Vue, Svelte, Solid, Vanilla JS, etc.)
-* work with user-owned files through a unified API
-* swap runtime adapters without changing application code
-* extend functionality through plugins
-* optionally enable native acceleration without modifying application logic
+- install Lokio using npm or yarn
+- choose any frontend framework (React, Next.js, Vue, Svelte, Solid, Vanilla JS, etc.)
+- work with user-owned files through a unified API
+- swap runtime adapters without changing application code
+- extend functionality through plugins
+- optionally enable native acceleration without modifying application logic
 
 If these goals are achieved, Lokio will provide a clean, extensible foundation for building privacy-first, local-first applications without imposing a specific UI framework or data format.

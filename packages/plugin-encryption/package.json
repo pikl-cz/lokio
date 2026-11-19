@@ -1,0 +1,60 @@
+{
+  "name": "@lokio/plugin-encryption",
+  "version": "0.1.0",
+  "description": "Lokio plugin that transparently encrypts file contents with AES-GCM (WebCrypto).",
+  "keywords": [
+    "lokio",
+    "lokio-plugin",
+    "local-first",
+    "encryption",
+    "aes-gcm",
+    "webcrypto"
+  ],
+  "homepage": "https://github.com/pikl-cz/lokio/tree/main/packages/plugin-encryption#readme",
+  "bugs": {
+    "url": "https://github.com/pikl-cz/lokio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pikl-cz/lokio.git",
+    "directory": "packages/plugin-encryption"
+  },
+  "license": "MIT",
+  "author": "Jan Pikl",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --out-dir dist --clean",
+    "dev": "tsup src/index.ts --format esm --dts --out-dir dist --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "clean": "rimraf dist",
+    "prepack": "node ../../scripts/copy-license.mjs"
+  },
+  "dependencies": {
+    "@lokio/core": "workspace:^",
+    "@lokio/types": "workspace:^"
+  },
+  "devDependencies": {
+    "@lokio/testing": "workspace:^",
+    "@lokio/plugin-history": "workspace:^"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

@@ -1,20 +1,52 @@
 {
   "name": "@lokio/cli",
   "version": "0.1.0",
-  "description": "Developer tooling for Lokio: lokio init | doctor | info | build.",
+  "description": "Developer tooling for Lokio: lokio init | doctor | info.",
+  "keywords": [
+    "lokio",
+    "local-first",
+    "offline-first",
+    "filesystem",
+    "file-system-access",
+    "workspace",
+    "typescript"
+  ],
+  "homepage": "https://github.com/pikl-cz/lokio/tree/main/packages/cli#readme",
+  "bugs": {
+    "url": "https://github.com/pikl-cz/lokio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pikl-cz/lokio.git",
+    "directory": "packages/cli"
+  },
   "license": "MIT",
+  "author": "Jan Pikl",
   "type": "module",
+  "sideEffects": true,
   "bin": {
     "lokio": "./dist/index.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm --out-dir dist --clean",
-    "dev": "tsup src/index.ts --format esm --out-dir dist --watch",
+    "build": "tsup --clean",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
     "clean": "rimraf dist",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "prepack": "node ../../scripts/copy-license.mjs"
   },
   "dependencies": {
-    "@lokio/core": "*"
+    "@lokio/core": "workspace:^",
+    "@lokio/node": "workspace:^",
+    "@lokio/testing": "workspace:^"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }

@@ -4,45 +4,97 @@
 
 <h1 align="center">Lokio</h1>
 
-<p align="center">A TypeScript-first SDK for building local-first applications.</p>
+<p align="center">
+  A TypeScript-first SDK for building <b>local-first</b> applications on top of plain, user-owned files.
+</p>
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the full design and roadmap.
+<p align="center">
+  <a href="https://github.com/pikl-cz/lokio/actions/workflows/ci.yml"><img src="https://github.com/pikl-cz/lokio/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://www.npmjs.com/package/@lokio/core"><img src="https://img.shields.io/npm/v/@lokio/core.svg" alt="npm" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT license" /></a>
+</p>
 
-## Getting started
+> **Applications own the data model. Users own the files. Lokio only provides the bridge.**
 
-```sh
-yarn install
-yarn build
-yarn test
+Lokio gives you one API for reading, writing, watching and organizing files - in Node, in the browser (a real
+folder via the File System Access API, or OPFS), and anywhere else you write an adapter for. It doesn't impose a
+file format, a database or a UI framework.
+
+```ts
+import { openWorkspace } from "@lokio/auto";
+
+const workspace = await openWorkspace({ root: "./notes" }); // a folder in Node, a picked folder in the browser
+
+await workspace.file("dreams/today.md").write("# Flying over Prague");
+
+workspace.watch((change) => console.log(change.source, change.type, change.path)); // incl. edits from other apps
+
+// read-modify-write under a lock - concurrent updates are never lost
+await workspace
+  .file("settings.json")
+  .updateJSON<{ theme?: string }>((s) => ({ ...s, theme: "dark" }));
 ```
+
+## Features
+
+- **One API, many runtimes** - Node (`fs/promises`), browsers (File System Access API, OPFS), or your own adapter.
+- **Safe by default** - paths can't escape the workspace, atomic writes in Node, typed errors with stable codes.
+- **Live** - change events for your own writes and for external edits (other apps, tabs, the user), with echo
+  suppression.
+- **Concurrency-aware** - locks within the app and across processes/tabs; `updateJSON` never loses an update.
+- **Pluggable** - decorate I/O or add APIs with plugins: version history, encryption, full-text search.
+- **Testable** - an in-memory adapter, a fake File System Access API, and a conformance suite every adapter passes.
+- **Small and dependency-free** - ESM, tree-shakeable, strict TypeScript.
 
 ## Packages
 
-This is a Yarn workspaces monorepo:
+| Package                                                  | Description                                                         |
+| -------------------------------------------------------- | ------------------------------------------------------------------- |
+| [`@lokio/core`](packages/core)                           | Workspace, files, directories, events, locks, errors, plugin API    |
+| [`@lokio/node`](packages/node)                           | Adapter for Node.js, Electron and Tauri backends                    |
+| [`@lokio/browser`](packages/browser)                     | Adapter for the File System Access API and OPFS, handle persistence |
+| [`@lokio/auto`](packages/auto)                           | `openWorkspace()` that picks the right adapter for the runtime      |
+| [`@lokio/plugin-history`](packages/plugin-history)       | Keeps previous versions of files                                    |
+| [`@lokio/plugin-encryption`](packages/plugin-encryption) | Transparent AES-GCM encryption at rest                              |
+| [`@lokio/plugin-search`](packages/plugin-search)         | Diacritics-insensitive full-text search that stays up to date       |
+| [`@lokio/testing`](packages/testing)                     | `MemoryAdapter`, adapter conformance suite, fake File System Access |
+| [`@lokio/cli`](packages/cli)                             | `lokio init` / `doctor` / `info`                                    |
+| [`@lokio/types`](packages/types)                         | Shared types (re-exported by core)                                  |
 
-- [`@lokio/types`](packages/types) - shared TypeScript types
-- [`@lokio/core`](packages/core) - workspace/file/directory abstractions, adapter interface, events, plugins
-- [`@lokio/browser`](packages/browser) - adapter backed by the File System Access API
-- [`@lokio/node`](packages/node) - adapter backed by `fs/promises`
-- [`@lokio/cli`](packages/cli) - developer tooling (`lokio init|doctor|info|build`)
-- [`@lokio/testing`](packages/testing) - in-memory adapter and test helpers
+Start with the [`@lokio/core` README](packages/core) for the full API.
 
-## Example
+## Examples
 
-```ts
-import { Lokio } from "@lokio/core";
-import { NodeAdapter } from "@lokio/node";
+See **[USECASES.md](USECASES.md)** for recipes: a dream journal, a Markdown vault, a recipe manager, a wiki, an image
+catalog, a kanban board, desktop apps, multi-tab sync, CLI tools, and testing.
 
-const workspace = await Lokio.openWorkspace(new NodeAdapter({ root: "./my-workspace" }));
+- [`examples/node-journal`](examples/node-journal) - a CLI journal with history and search.
+- [`examples/browser-notes`](examples/browser-notes) - a notes app on a folder the user picks, with live
+  external changes.
 
-const file = await workspace.open("dreams/today.dream");
-await file.write("Today I dreamed about...");
+## Runtime support
+
+| Runtime            | Adapter                 | Watch | Native move | Cross-process locks |
+| ------------------ | ----------------------- | ----- | ----------- | ------------------- |
+| Node ≥ 20          | `NodeAdapter`           | ✓     | ✓           | ✓ (lock files)      |
+| Chrome / Edge ≥ 86 | `BrowserAdapter.pick()` | ✓¹    | files only² | ✓ (Web Locks)       |
+| Modern browsers³   | `BrowserAdapter.opfs()` | ✓¹    | files only² | ✓ (Web Locks)       |
+| Tests, previews    | `MemoryAdapter`         | ✓     | ✓           | in-process          |
+
+¹ Where `FileSystemObserver` is available (Chromium 129+). ² Directories fall back to copy + delete.
+³ Needs OPFS with `createWritable()` (Chromium, Firefox 111+, Safari 26+). Only Chromium is tested in CI.
+
+## Development
+
+```sh
+pnpm install
+pnpm check          # lint, typecheck, tests with coverage, build
+pnpm test:browser   # conformance suite in real Chromium (run `pnpm exec playwright install chromium` once)
 ```
 
-## Scripts
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the repo layout and guidelines, and [ARCHITECTURE.md](ARCHITECTURE.md) for
+the vision and roadmap.
 
-- `yarn build` - build all packages (tsup, ESM + type declarations)
-- `yarn dev` - build all packages in watch mode
-- `yarn test` / `yarn test:watch` - run the Vitest suite
-- `yarn typecheck` - run `tsc --noEmit` in every package
-- `yarn clean` - remove build output
+## License
+
+[MIT](LICENSE)

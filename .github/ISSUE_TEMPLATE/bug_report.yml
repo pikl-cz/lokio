@@ -1,0 +1,33 @@
+name: Bug report
+description: Something in Lokio doesn't work as documented
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead? Include error messages and `error.code`.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: Ideally a snippet using `MemoryAdapter` from `@lokio/testing`, or a link to a repo.
+      render: ts
+    validations:
+      required: true
+  - type: input
+    id: packages
+    attributes:
+      label: Packages and versions
+      placeholder: "@lokio/core 0.1.0, @lokio/browser 0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: Runtime
+      placeholder: "Chrome 131 / Node 22.11 on macOS 15"
+    validations:
+      required: true
